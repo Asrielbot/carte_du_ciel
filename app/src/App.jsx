@@ -3,9 +3,11 @@ import {useEffect, useState} from "react";
 import "./App.css";
 import { parseCSV } from "./utils";
 import Top_50_Array from "./components/Top_50_array.jsx";
+import Top_50_Hottest from "./components/Top_50_hottest.jsx";
 
 function App() {
   const [stars, setStars] = useState([]);
+  const [hottestStars, setHottestStars] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +27,13 @@ function App() {
             .slice(0, 50); // Prendre les 50 premières
 
         setStars(filteredStars);
+
+        // Filtrer les 50 étoiles les plus chaudes
+        const filteredStarsByHeat = data
+            .sort((a, b) => b.ci - a.ci) // Trier par index de couleur décroissant
+            .slice(0, 50); // Prendre les 50 premières
+
+        setHottestStars(filteredStarsByHeat);
 
         // Générer un fichier JSON
         // generateJSONFile(filteredStars);
@@ -49,6 +58,8 @@ function App() {
       <div className="App">
         <h1>Top 50 Étoiles les Plus Lumineuses</h1>
         <Top_50_Array data={stars}/>
+        <h1>Top 50 Étoiles les plus chaudes</h1>
+        <Top_50_Hottest data={hottestStars}/>
       </div>
   );
 }
